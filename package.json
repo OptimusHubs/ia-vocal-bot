@@ -1,0 +1,15 @@
+{
+  "name": "ia-vocal-bot",
+  "version": "1.0.0",
+  "description": "Bot vocal Twilio + OpenAI",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "twilio": "^4.19.0",
+    "openai": "^4.0.0"
+  }
+}
