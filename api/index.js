@@ -3,8 +3,8 @@ import twilio from "twilio";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(200).send("OK");
-  }
+  req.method = "POST";
+}
 
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
