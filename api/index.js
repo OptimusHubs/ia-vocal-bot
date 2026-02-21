@@ -1,38 +1,20 @@
-import OpenAI from "openai";
 import twilio from "twilio";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-  req.method = "POST";
-  }
-
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
 
   const twiml = new twilio.twiml.VoiceResponse();
 
-  const userInput = "Bonjour, présente-toi en 2 phrases.";
+  twiml.say(
+    "Bonjour Alexandre. Ton bot vocal fonctionne parfaitement.",
+    { voice: "alice", language: "fr-FR" }
+  );
 
-let reply;
+  twiml.pause({ length: 1 });
 
-try {
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: "Tu es un assistant vocal naturel et professionnel." },
-      { role: "user", content: userInput }
-    ],
-  });
-
-  reply = completion.choices[0].message.content;
-
-} catch (error) {
-  console.error("Erreur OpenAI :", error);
-  reply = "Désolé, une erreur technique est survenue.";
-}
-
-  twiml.say(reply, { voice: "alice", language: "fr-FR" });
+  twiml.say(
+    "Nous pouvons maintenant construire un vrai agent conversationnel.",
+    { voice: "alice", language: "fr-FR" }
+  );
 
   res.setHeader("Content-Type", "text/xml");
   res.status(200).send(twiml.toString());
