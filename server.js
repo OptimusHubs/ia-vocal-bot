@@ -19,7 +19,7 @@ const client = twilio(accountSid, authToken);
 app.post("/voice", async (req, res) => {
   const twiml = new twilio.twiml.VoiceResponse();
 
-  const userInput = req.body.SpeechResult || "Bonjour";
+  const userInput = "Bonjour, fais une présentation courte.";
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
