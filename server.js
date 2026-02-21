@@ -47,7 +47,7 @@ app.get("/call", async (req, res) => {
   const to = req.query.to;
 
   await client.calls.create({
-    url: "https://TON-PROJET.vercel.app/voice",
+    url: "https://ia-vocal-bot-5eup.vercel.app/",
     to: to,
     from: twilioNumber,
   });
