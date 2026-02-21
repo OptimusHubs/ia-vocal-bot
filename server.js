@@ -1,25 +1,18 @@
-import express from "express";
 import OpenAI from "openai";
 import twilio from "twilio";
 
-const app = express();
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(200).send("OK");
+  }
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilioNumber = process.env.TWILIO_PHONE_NUMBER;
-
-const client = twilio(accountSid, authToken);
-
-app.post("/voice", async (req, res) => {
   const twiml = new twilio.twiml.VoiceResponse();
 
-  const userInput = "Bonjour, fais une présentation courte.";
+  const userInput = "Bonjour, présente-toi en 2 phrases.";
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -33,28 +26,6 @@ app.post("/voice", async (req, res) => {
 
   twiml.say(reply, { voice: "alice", language: "fr-FR" });
 
-  twiml.gather({
-    input: "speech",
-    action: "/voice",
-    method: "POST",
-  });
-
-  res.type("text/xml");
-  res.send(twiml.toString());
-});
-
-app.get("/call", async (req, res) => {
-  const to = req.query.to;
-
-  await client.calls.create({
-    url: "https://ia-vocal-bot-5eup.vercel.app/",
-    to: to,
-    from: twilioNumber,
-  });
-
-  res.send("Appel lancé !");
-});
-
-app.listen(3000, () => {
-  console.log("Serveur lancé");
-});
+  res.setHeader("Content-Type", "text/xml");
+  res.status(200).send(twiml.toString());
+}
