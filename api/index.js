@@ -14,6 +14,9 @@ export default async function handler(req, res) {
 
   const userInput = "Bonjour, présente-toi en 2 phrases.";
 
+let reply;
+
+try {
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
@@ -22,7 +25,12 @@ export default async function handler(req, res) {
     ],
   });
 
-  const reply = completion.choices[0].message.content;
+  reply = completion.choices[0].message.content;
+
+} catch (error) {
+  console.error("Erreur OpenAI :", error);
+  reply = "Désolé, une erreur technique est survenue.";
+}
 
   twiml.say(reply, { voice: "alice", language: "fr-FR" });
 
